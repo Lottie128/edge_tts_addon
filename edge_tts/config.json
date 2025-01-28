@@ -1,0 +1,25 @@
+{
+  "name": "Edge TTS",
+  "version": "1.0.0",
+  "slug": "edge_tts",
+  "description": "Microsoft Edge TTS integration for Home Assistant.",
+  "arch": ["amd64", "armv7", "aarch64"],
+  "startup": "services",
+  "boot": "auto",
+  "hassio_api": true,
+  "hassio_role": "default",
+  "host_network": true,
+  "ports": {
+    "5000/tcp": 5000
+  },
+  "options": {
+    "default_voice": "en-US-AriaNeural",
+    "cache_enabled": true,
+    "cache_max_size": 50
+  },
+  "schema": {
+    "default_voice": "str",
+    "cache_enabled": "bool",
+    "cache_max_size": "int"
+  }
+}

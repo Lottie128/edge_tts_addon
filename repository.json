@@ -1,0 +1,8 @@
+{
+    "name": "Edge TTS Add-on Repository",
+    "description": "A repository for the Home Assistant Edge TTS add-on.",
+    "url": "https://github.com/Lottie128/ha-edge-tts-addon",
+    "maintainer": "Lottie128",
+    "version": "1.0.0"
+  }
+  
