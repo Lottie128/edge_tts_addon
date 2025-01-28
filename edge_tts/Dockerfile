@@ -1,20 +1,33 @@
 ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:latest
 ARG BUILD_ARCH
 
-# Set up base image
+# Use the Home Assistant base image
 FROM ${BUILD_FROM}
 
 # Set environment variables
 ENV LANG C.UTF-8
 
-# Copy necessary files
+# Install Python 3 and pip
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    py3-wheel \
+    py3-setuptools \
+    py3-cryptography \
+    build-base \
+    libffi-dev \
+    musl-dev
+
+# Upgrade pip to the latest version
+RUN pip3 install --upgrade pip
+
+# Install required Python packages
+RUN pip3 install edge-tts flask
+
+# Copy necessary files into the container
 WORKDIR /usr/src/
 COPY edge_tts_server.py /usr/src/
 COPY run.sh /usr/src/
-
-# Install required Python packages
-RUN apk add --no-cache python3 py3-pip && \
-    pip3 install --no-cache-dir edge-tts flask
 
 # Expose the port used by the add-on
 EXPOSE 5000
