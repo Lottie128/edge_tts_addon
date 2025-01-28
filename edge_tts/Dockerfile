@@ -1,40 +1,38 @@
 ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:latest
 ARG BUILD_ARCH
 
-# Use the Home Assistant base image
 FROM ${BUILD_FROM}
 
 # Set environment variables
 ENV LANG C.UTF-8
 
-# Install Python 3, pip, and required system dependencies
+# Install Python 3, pip, and build dependencies
 RUN apk add --no-cache \
     python3 \
     py3-pip \
-    py3-wheel \
-    py3-setuptools \
-    py3-cryptography \
     build-base \
-    libffi-dev \
-    musl-dev \
     gcc \
-    libc-dev
+    musl-dev \
+    libffi-dev \
+    libc-dev \
+    openssl-dev \
+    zlib-dev
 
-# Upgrade pip to the latest compatible version
+# Forcefully ensure pip works and is updated
 RUN python3 -m ensurepip && \
-    pip3 install --no-cache-dir --upgrade pip
+    pip3 install --no-cache-dir --upgrade pip setuptools wheel
 
 # Install required Python packages
 RUN pip3 install --no-cache-dir edge-tts flask
 
-# Copy necessary files into the container
+# Copy add-on files
 WORKDIR /usr/src/
 COPY edge_tts_server.py /usr/src/
 COPY run.sh /usr/src/
 
-# Expose the port used by the add-on
+# Expose port used by the add-on
 EXPOSE 5000
 
-# Make run.sh executable and set it as the entrypoint
+# Make the run script executable
 RUN chmod +x /usr/src/run.sh
 ENTRYPOINT ["/usr/src/run.sh"]
