@@ -7,7 +7,7 @@ FROM ${BUILD_FROM}
 # Set environment variables
 ENV LANG C.UTF-8
 
-# Install Python 3 and pip
+# Install Python 3, pip, and required system dependencies
 RUN apk add --no-cache \
     python3 \
     py3-pip \
@@ -16,13 +16,16 @@ RUN apk add --no-cache \
     py3-cryptography \
     build-base \
     libffi-dev \
-    musl-dev
+    musl-dev \
+    gcc \
+    libc-dev
 
-# Upgrade pip to the latest version
-RUN pip3 install --upgrade pip
+# Upgrade pip to the latest compatible version
+RUN python3 -m ensurepip && \
+    pip3 install --no-cache-dir --upgrade pip
 
 # Install required Python packages
-RUN pip3 install edge-tts flask
+RUN pip3 install --no-cache-dir edge-tts flask
 
 # Copy necessary files into the container
 WORKDIR /usr/src/
